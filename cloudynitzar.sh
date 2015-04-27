@@ -18,11 +18,6 @@ jessie() {
 	chsh -s /bin/sh www-data
 }
 
-# Paquets necessaris per l'instal·lació
-apt-get update
-apt-get upgrade
-apt-get install -y curl 
-
 # Instal·lar Repositoris
 mkdir -p ${ARCHDIR}
 # Add Backports Repo
@@ -34,11 +29,17 @@ getkey A59C5DC8
 echo "deb http://serveis.guifi.net/debian guifi/" > ${ARCHDIR}/serveis.list
 getkey 2E484DAB
 
+# Paquets necessaris per l'instal·lació
+apt-get update
+apt-get upgrade
+apt-get install -y curl 
+
+
 # Instal·lar paquets debian
 while IFS=': ' read name pkgs;
 do
 	echo "Install $name."
-	echo "apt-get install -y $pkgs"
+	apt-get install -y $pkgs
 done < <(curl -s $LPACKAGES)
 
 # Instal·lar altres paquets
