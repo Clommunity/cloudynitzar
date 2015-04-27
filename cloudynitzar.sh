@@ -6,7 +6,7 @@ AREAS="main contrib"
 ARCHDIR=/etc/apt/source.list.d/
 LPACKAGES="https://raw.githubusercontent.com/Clommunity/lbmake/master/packages"
 
-CPACKAGES="avahi-ps.chroot cDistro.chroot getinconf-client.chroot peerstreamer.chroot serf.chroot"
+CPACKAGES="avahi-ps.chroot cDistro.chroot getinconf-client.chroot serf.chroot"
 HOOKPATH="https://raw.githubusercontent.com/Clommunity/lbmake/master/hooks/"
 
 # funcions globals
