@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Agafa variables necessaries
+c# Agafa variables necessaries
 DISTRIBUTION=$(lsb_release -c|cut -f 2)
 AREAS="main contrib"
 ARCHDIR=/etc/apt/source.list.d/
@@ -12,6 +12,10 @@ HOOKPATH="https://raw.githubusercontent.com/Clommunity/lbmake/master/hooks/"
 # funcions globals
 getkey() {
 	gpg --keyserver pgpkeys.mit.edu --recv-key $1 && gpg --export --armor $1 | apt-key add -
+}
+
+jessie() {
+	chsh -s /bin/sh www-data
 }
 
 # Paquets necessaris per l'instal·lació
@@ -44,4 +48,6 @@ do
 	curl -s ${HOOKPATH}$i |sh -
 done
 
-
+# jessie changes
+# activar la shell de www-data, per que es puguin executar coses amb su "www-data"...
+[ "$(type -t $DISTRIBUTION)10" == "function" ] && $DISTRIBUTION
