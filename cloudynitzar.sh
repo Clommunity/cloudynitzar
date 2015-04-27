@@ -21,7 +21,7 @@ jessie() {
 # Paquets necessaris per l'instal·lació
 apt-get update
 apt-get upgrade
-apt-get install -y -Y curl 
+apt-get install -y curl 
 
 # Instal·lar Repositoris
 mkdir -p ${ARCHDIR}
@@ -38,7 +38,7 @@ getkey 2E484DAB
 while IFS=': ' read name pkgs;
 do
 	echo "Install $name."
-	echo "apt-get install -y -Y $pkgs"
+	echo "apt-get install -y $pkgs"
 done < <(curl -s $LPACKAGES)
 
 # Instal·lar altres paquets
