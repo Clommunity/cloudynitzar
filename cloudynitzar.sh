@@ -1,6 +1,6 @@
 #!/bin/bash
 
-c# Agafa variables necessaries
+# Agafa variables necessaries
 DISTRIBUTION=$(lsb_release -c|cut -f 2)
 AREAS="main contrib"
 ARCHDIR=/etc/apt/source.list.d/
@@ -50,4 +50,4 @@ done
 
 # jessie changes
 # activar la shell de www-data, per que es puguin executar coses amb su "www-data"...
-[ "$(type -t $DISTRIBUTION)10" == "function" ] && $DISTRIBUTION
+[ "$(type -t $DISTRIBUTION)102" == "function" ] && $DISTRIBUTION
