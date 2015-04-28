@@ -3,7 +3,7 @@
 # Agafa variables necessaries
 DISTRIBUTION=$(lsb_release -c|cut -f 2)
 AREAS="main contrib"
-ARCHDIR=/etc/apt/source.list.d/
+ARCHDIR=/etc/apt/sources.list.d/
 LPACKAGES="https://raw.githubusercontent.com/Clommunity/lbmake/master/packages"
 
 CPACKAGES="avahi-ps.chroot cDistro.chroot getinconf-client.chroot serf.chroot"
@@ -20,6 +20,7 @@ getkey() {
 
 jessie() {
 	chsh -s /bin/sh www-data
+	chsh -s /bin/sh nobody
 }
 
 # Instal·lar Repositoris
