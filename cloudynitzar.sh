@@ -51,7 +51,7 @@ done
 
 # jessie changes
 # activar la shell de www-data, per que es puguin executar coses amb su "www-data"...
-[ "$(type -t $DISTRIBUTION)102" == "function" ] && $DISTRIBUTION
+[ "$(type -t $DISTRIBUTION)" == "function" ] && $DISTRIBUTION
 
 # Activar daemons
 /etc/init.d/cdistro start
