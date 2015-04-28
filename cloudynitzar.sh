@@ -8,6 +8,10 @@ LPACKAGES="https://raw.githubusercontent.com/Clommunity/lbmake/master/packages"
 
 CPACKAGES="avahi-ps.chroot cDistro.chroot getinconf-client.chroot serf.chroot"
 HOOKPATH="https://raw.githubusercontent.com/Clommunity/lbmake/master/hooks/"
+ARCH=$(uname -m|sed 's/i.86/i386/'|sed 's/^arm.*/arm/')
+
+[ -z "$DISTRRIBUTION" ] && { apt-get install -y lsb-release; DISTRIBUTION=$(lsb_release -c|cut -f 2); }
+
 
 # funcions globals
 getkey() {
@@ -46,7 +50,7 @@ done < <(curl -s $LPACKAGES)
 
 for i in $CPACKAGES
 do
-	curl -s ${HOOKPATH}$i |sh -
+	curl -s ${HOOKPATH}$i |ARCH=$ARCH sh -
 done
 
 # jessie changes
@@ -54,5 +58,9 @@ done
 [ "$(type -t $DISTRIBUTION)" == "function" ] && $DISTRIBUTION
 
 # Activar daemons
+echo "Stop & Start cDistro."
+/etc/init.d/cdistro stop
 /etc/init.d/cdistro start
+echo "Stop & Start SERF."
+/etc/init.d/serf stop
 /etc/init.d/serf start
