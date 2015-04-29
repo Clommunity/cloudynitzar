@@ -30,16 +30,16 @@ getHTTPCode() {
 }
 
 specifics() {
-	[ getHTTPCode "${DIST}/${1}/${2}${SPECIFICS_EXT}" == "200" ] && {
-		while IFS=': ' read name destin;
+	[ $(getHTTPCode "${DIST}/${1}/${2}${SPECIFICS_EXT}") == "200" ] && {
+		while IFS='|' read name destin mod;
 		do
-			echo "COPY $name -> $destin"
+			echo "COPY ${DIST}/${1}/${2}/$name -> ${destin}/${name} $mod"
+			mkdir -p ${destin}
 			$CURL -s "${DIST}/${1}/${2}/${name}" -o "${destin}/${name}"
-		done < <($CURL -s "${DIST}/${1}/${2}/${SPECIFICS_EXT}")
+			chmod $mod ${destin}/${name}
+		done < <($CURL -s "${DIST}/${1}/${2}${SPECIFICS_EXT}")
 	}
 }
-
-
 
 # Instal·lar Repositoris
 mkdir -p ${ARCHDIR}
