@@ -5,10 +5,12 @@ DISTRIBUTION=$(lsb_release -c|cut -f 2)
 AREAS="main contrib"
 ARCHDIR=/etc/apt/sources.list.d/
 LPACKAGES="https://raw.githubusercontent.com/Clommunity/lbmake/master/packages"
-
 CPACKAGES="avahi-ps.chroot cDistro.chroot getinconf-client.chroot serf.chroot"
 HOOKPATH="https://raw.githubusercontent.com/Clommunity/lbmake/master/hooks/"
 ARCH=$(uname -m|sed 's/i.86/i386/'|sed 's/^arm.*/arm/')
+DIST="https://raw.githubusercontent.com/Clommunity/cloudynitzar/master/dist"
+CURL="/usr/bin/curl"
+SPECIFICS_EXT=".list"
 
 [ -z "$DISTRRIBUTION" ] && { apt-get install -y lsb-release; DISTRIBUTION=$(lsb_release -c|cut -f 2); }
 
@@ -22,6 +24,22 @@ jessie() {
 	chsh -s /bin/sh www-data
 	chsh -s /bin/sh nobody
 }
+
+getHTTPCode() {
+	$CURL -s -o /dev/null -I -w "%{http_code}" $1
+}
+
+specifics() {
+	[ getHTTPCode "${DIST}/${1}/${2}${SPECIFICS_EXT}" == "200" ] && {
+		while IFS=': ' read name destin;
+		do
+			echo "COPY $name -> $destin"
+			$CURL -s "${DIST}/${1}/${2}/${name}" -o "${destin}/${name}"
+		done < <($CURL -s "${DIST}/${1}/${2}/${SPECIFICS_EXT}")
+	}
+}
+
+
 
 # Instal·lar Repositoris
 mkdir -p ${ARCHDIR}
@@ -45,18 +63,20 @@ while IFS=': ' read name pkgs;
 do
 	echo "Install $name."
 	apt-get install -y $pkgs
-done < <(curl -s $LPACKAGES)
+done < <($CURL -s $LPACKAGES)
 
 # Instal·lar altres paquets
 
 for i in $CPACKAGES
 do
-	curl -s ${HOOKPATH}$i |ARCH=$ARCH sh -
+	$CURL -s ${HOOKPATH}$i |ARCH=$ARCH sh -
 done
 
 # jessie changes
 # activar la shell de www-data, per que es puguin executar coses amb su "www-data"...
 [ "$(type -t $DISTRIBUTION)" == "function" ] && $DISTRIBUTION
+
+specifics $ARCH $DISTRIBUTION
 
 # Activar daemons
 echo "Stop & Start cDistro."
