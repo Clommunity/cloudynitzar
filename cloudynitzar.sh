@@ -12,7 +12,7 @@ DIST="https://raw.githubusercontent.com/Clommunity/cloudynitzar/master/dist"
 CURL="/usr/bin/curl"
 SPECIFICS_EXT=".list"
 
-[ -z "$DISTRRIBUTION" ] && { apt-get install -y lsb-release; DISTRIBUTION=$(lsb_release -c|cut -f 2); }
+[ -z "$DISTRIBUTION" ] && { apt-get install -y lsb-release; DISTRIBUTION=$(lsb_release -c|cut -f 2); }
 
 
 # funcions globals
