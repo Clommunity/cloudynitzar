@@ -8,7 +8,7 @@ An updated Debian installation (at least Wheezy 7.8) with `curl`, `lsb-release` 
 
 ### Procedure
 From your Debian system run, as root:
-
+`apt-get update; apt-get install curl lsb-release`
 `curl -k https://raw.githubusercontent.com/Clommunity/cloudynitzar/master/cloudynitzar.sh | bash -`
 
 and let the magic begin!
