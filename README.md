@@ -10,7 +10,7 @@ An updated Debian installation (at least Wheezy 7.8) with `curl`, `lsb-release` 
 From your Debian system run, as root:
 
 ````sh
-apt-get update; apt-get install curl lsb-releas`me
+apt-get update; apt-get install curl lsb-release
 curl -k https://raw.githubusercontent.com/Clommunity/cloudynitzar/master/cloudynitzar.sh | bash -
 ````
 
