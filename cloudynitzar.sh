@@ -55,7 +55,7 @@ getkey 2E484DAB
 # Paquets necessaris per l'instal·lació
 apt-get update
 apt-get upgrade -y --no-install-recommends
-apt-get install -y curl 
+apt-get install -y curl unzip
 
 
 # Instal·lar paquets debian
