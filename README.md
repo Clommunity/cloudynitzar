@@ -10,7 +10,7 @@ A system with an up-to-date Debian 8 *Jessie* installation (Debian 7.8 *Wheezy* 
 From your Debian system run, as root:
 
 ````sh
-apt-get update; apt-get install curl lsb-release
+apt-get update; apt-get install -y curl lsb-release
 curl -k https://raw.githubusercontent.com/Clommunity/cloudynitzar/master/cloudynitzar.sh | bash -
 ````
 
