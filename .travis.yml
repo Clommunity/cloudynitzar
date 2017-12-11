@@ -11,4 +11,6 @@ install:
 before_script:
   - sudo bash ./cloudynitzar.sh
 
-script: tests/01_php_web_interface.sh
+script:
+  - tests/01_php_web_interface.sh
+  - tests/02_serf_daemon.sh
