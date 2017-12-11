@@ -14,3 +14,4 @@ before_script:
 script:
   - tests/01_php_web_interface.sh
   - tests/02_serf_daemon.sh
+  - tests/03_web_interface_login.sh
