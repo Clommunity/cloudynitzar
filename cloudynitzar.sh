@@ -5,11 +5,14 @@
 # The Cloudynitzar application name
 APPNAME="Cloudynitzar"
 
-# Debian release name (e.g. jessie, stretch)
+# Debian/Ubuntu release name (e.g. jessie, stretch)
+DISTNAME=$(lsb_release -is)
+
+# Debian/Ubuntu release name (e.g. jessie, stretch, trusty)
 RELEASENAME=$(lsb_release -cs)
 
 # Use packages from the "main" and "contrib" sections of the Debian repositories
-SECTIONS="main contrib"
+DEBSECTIONS="main contrib"
 
 # The directory where external APT .list files are saved
 SOURCESLISTDDIR=/etc/apt/sources.list.d/
@@ -18,12 +21,12 @@ SOURCESLISTDDIR=/etc/apt/sources.list.d/
 LBMAKEPACKAGES="https://raw.githubusercontent.com/Clommunity/lbmake/master/packages"
 
 # List of Cloudy packages to install
-CLOUDYPACKAGES="avahi-ps.chroot cDistro.chroot serf.chroot"
+CLOUDYPACKAGES="cDistro.chroot serf.chroot ipfs.chroot"
 
 # List of deprecated Cloudy packages not to be installed
 OLDCLOUDYPACKAGES="getinconf-client.chroot"
 
-# List of required Debian packages for the Cloudynization process
+# List of required Debian/Ubuntu packages for the Cloudynization process
 DEBREQPACKAGES="curl unzip dirmngr"
 
 # URL for lbmake's package hooks' path
@@ -66,8 +69,9 @@ get_primary_network_interface() {
 	[ -z "$IPRDEFAULT" ] && [ ! -z "$IPRCN" ] && echo "$IPRCN" && return
 }
 
-# Specific actions for Debian Jessie
+# Specific actions for Debian Jessie:
 jessie() {
+	# Activate shell for www-data so that this user can execute commands
 	chsh -s /bin/sh www-data
 	chsh -s /bin/sh nobody
 }
@@ -117,9 +121,11 @@ echo ""
 echo "[$APPNAME] - Adding repository source files to ${SOURCESLISTDDIR}..."
 mkdir -p ${SOURCESLISTDDIR}
 
-# Add Backports repository
-echo "[$APPNAME] - Adding ${RELEASENAME}-backports repository..."
-echo "deb http://ftp.debian.org/debian ${RELEASENAME}-backports ${SECTIONS}" > ${SOURCESLISTDDIR}/backports.list
+# Add Backports repository (only Debian)
+[ "$DISTNAME" == 'Debian' ] && {
+	echo "[$APPNAME] - Adding ${RELEASENAME}-backports repository..."
+	echo "deb http://ftp.debian.org/debian ${RELEASENAME}-backports ${DEBSECTIONS}" > ${SOURCESLISTDDIR}/backports.list
+}
 
 # Add Clommuntiy repository
 echo "[$APPNAME] - Adding Clommunity repository..."
@@ -144,17 +150,16 @@ echo "[$APPNAME] - Updating package sources with newly added repositories..."
 apt-get -qq update
 echo ""
 
-# Upgrade Debian packages without install recommended packages
-echo "[$APPNAME] - Upgrading Debian packages..."
+# Upgrade Debian/Ubuntu packages without install recommended packages
+echo "[$APPNAME] - Upgrading $DISTNAME packages..."
 apt-get upgrade -qy --no-install-recommends
 echo ""
 
-
-# Install Debian packages
+# Install Debian/Ubuntu packages
 echo "[$APPNAME] - Installing Debian packages needed for Cloudy..."
 while IFS=': ' read name pkgs;
 do
-	echo "[$APPNAME] - $name."
+	echo "[$APPNAME] - Installing packages required by $name"
 	apt-get install -yq $pkgs
 done < <($CURL -s $LBMAKEPACKAGES-$RELEASENAME)
 echo ""
@@ -167,8 +172,8 @@ do
 done
 echo ""
 
-# jessie changes
-# activar la shell de www-data, per que es puguin executar coses amb su "www-data"...
+# Call the function named as the release to perform release-specific changes
+echo "[$APPNAME] - Performing specific changes for $DISTNAME $RELEASENAME..."
 [ "$(type -t $RELEASENAME)" == "function" ] && $RELEASENAME
 
 specifics $ARCH $RELEASENAME
