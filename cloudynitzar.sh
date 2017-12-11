@@ -138,7 +138,7 @@ echo ""
 
 # Upgrade Debian/Ubuntu packages without install recommended packages
 echo "[$APPNAME] - Upgrading $DISTNAME packages..."
-apt-get upgrade -qy --no-install-recommends
+#apt-get upgrade -qy --no-install-recommends
 echo ""
 
 # Install Debian/Ubuntu packages
