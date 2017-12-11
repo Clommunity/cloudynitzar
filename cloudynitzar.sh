@@ -78,15 +78,13 @@ jessie() {
 
 # ??? (TODO)
 specifics() {
-	[ $(get_http_code "${DISTURL}/${1}/${2}${SPECIFICS_EXT}") == "200" ] && {
-		while IFS='|' read name destin mod;
-		do
-			echo "COPY ${DISTURL}/${1}/${2}/$name -> ${destin}/${name} $mod"
-			mkdir -p ${destin}
-			$CURL -s "${DISTURL}/${1}/${2}/${name}" -o "${destin}/${name}"
-			chmod $mod ${destin}/${name}
-		done < <($CURL -s "${DISTURL}/${1}/${2}${SPECIFICS_EXT}")
-	}
+	[ $(get_http_code "${DISTURL}/${1}/${2}${SPECIFICS_EXT}") == "200" ] && { while IFS='|' read name destin mod; do
+	echo "COPY ${DISTURL}/${1}/${2}/$name -> ${destin}/${name} $mod"
+	mkdir -p ${destin}
+	$CURL -s "${DISTURL}/${1}/${2}/${name}" -o "${destin}/${name}"
+	chmod $mod ${destin}/${name}
+	done < <($CURL -s "${DISTURL}/${1}/${2}${SPECIFICS_EXT}")
+	} || echo "No specific actions for ${1} $2 found"
 }
 
 
