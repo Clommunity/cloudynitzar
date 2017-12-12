@@ -54,7 +54,7 @@ get_http_code() {
 
 # Get a GPG key and add it to the APT keyring
 get_key_and_add_apt() {
-	gpg --keyserver pgpkeys.mit.edu --recv-key $1 && gpg --export --armor $1 | apt-key add -
+	gpg --keyserver keys.gnupg.net --recv-key $1 && gpg --export --armor $1 | apt-key add -
 }
 
 # Find out which is the primary network interface
