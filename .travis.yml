@@ -9,7 +9,7 @@ install:
   - sudo apt-get install -y --force-yes curl lsb-release
 
 before_script:
-  - sudo bash ./cloudynitzar.sh
+  - sudo su -c "bash $PWD/cloudynitzar.sh"
 
 script:
   - tests/01_php_web_interface.sh
