@@ -1,5 +1,12 @@
 #!/bin/bash
 
+### Enable logging to a file
+LOGDIR="/var/log/cloudy/"
+LOGFILE="cloudynitzar.log"
+mkdir -p $LOGDIR
+exec > >(tee -a ${LOGDIR}/${LOGFILE} )
+exec 2> >(tee -a ${LOGDIR}/${LOGFILE} >&2)
+
 ### Global variables needed for the configuration process
 
 # The Cloudynitzar application name
@@ -45,6 +52,7 @@ CURL="/usr/bin/curl"
 SPECIFICS_EXT=".list"
 
 
+
 ### Global functions for the the Cloudynization process
 
 # ??? (TODO)
@@ -80,78 +88,78 @@ jessie() {
 
 # In case the lsb-release package was not installed and we could not get the
 # release name, install it:
-echo "[$APPNAME] - Finding out the release name..."
-[ -z "$RELEASENAME" ] && { echo "[$APPNAME] - Warning: package lsb-release is not installed."; \
-	echo "[$APPNAME] - Updating package lists..."; \
+echo "[$APPNAME] - [$(date)] - Finding out the release name..."
+[ -z "$RELEASENAME" ] && { echo "[$APPNAME] - [$(date)] - Warning: package lsb-release is not installed."; \
+	echo "[$APPNAME] - [$(date)] - Updating package lists..."; \
 	apt-get -qq update; \
-	echo "[$APPNAME] - Installing package lsb-release..."; \
+	echo "[$APPNAME] - [$(date)] - Installing package lsb-release..."; \
 	apt-get install -qy lsb-release; \
 	RELEASENAME=$(lsb_release -cs); }
 
 # Last check for the release name
-[ -z "$RELEASENAME" ] && { echo "[$APPNAME] - Error: could not determine the current release name. Exiting..."; \
+[ -z "$RELEASENAME" ] && { echo "[$APPNAME] - [$(date)] - Error: could not determine the current release name. Exiting..."; \
 	exit 1; }
-echo "[$APPNAME] - The release name is \"$RELEASENAME\""
+echo "[$APPNAME] - [$(date)] - The release name is \"$RELEASENAME\""
 echo ""
 
 # Update package sources
-echo "[$APPNAME] - Updating package sources..."
+echo "[$APPNAME] - [$(date)] - Updating package sources..."
 apt-get -qq update
 
 # Install required packages for the Cloudynization process
-echo "[$APPNAME] - Installing required packages for the Cloudynization process..."
+echo "[$APPNAME] - [$(date)] - Installing required packages for the Cloudynization process..."
 apt-get install -qy ${DEBREQPACKAGES}
 echo ""
 
 # Add repository source files
-echo "[$APPNAME] - Adding repository source files to ${SOURCESLISTDDIR}..."
+echo "[$APPNAME] - [$(date)] - Adding repository source files to ${SOURCESLISTDDIR}..."
 mkdir -p ${SOURCESLISTDDIR}
 
 # Add Backports repository (only Debian)
 [ "$DISTNAME" == 'Debian' ] && {
-	echo "[$APPNAME] - Adding ${RELEASENAME}-backports repository..."
+	echo "[$APPNAME] - [$(date)] - Adding ${RELEASENAME}-backports repository..."
 	echo "deb http://ftp.debian.org/debian ${RELEASENAME}-backports ${DEBSECTIONS}" > ${SOURCESLISTDDIR}/backports.list
 }
 
 # Add Clommuntiy repository
-echo "[$APPNAME] - Adding Clommunity repository..."
+echo "[$APPNAME] - [$(date)] - Adding Clommunity repository..."
 echo "deb http://repo.clommunity-project.eu/debian unstable/" > ${SOURCESLISTDDIR}/cloudy.list
 
 # Add Guifi repository
-echo "[$APPNAME] - Adding Guifi.net repository..."
+echo "[$APPNAME] - [$(date)] - Adding Guifi.net repository..."
 echo "deb http://serveis.guifi.net/debian guifi/" > ${SOURCESLISTDDIR}/guifi.list
 echo ""
 
 # Add Clommunity repository GPG
-echo "[$APPNAME] - Adding Clommunity repository GPG key to the local APT keyring..."
+echo "[$APPNAME] - [$(date)] - Adding Clommunity repository GPG key to the local APT keyring..."
 get_key_and_add_apt A59C5DC8
 
 # Add Guifi.net repository GPG
-echo "[$APPNAME] - Adding Guifi.net repository GPG key to the local APT keyring..."
+echo "[$APPNAME] - [$(date)] - Adding Guifi.net repository GPG key to the local APT keyring..."
 get_key_and_add_apt 2E484DAB
 echo ""
 
 # Update package sources again
-echo "[$APPNAME] - Updating package sources with newly added repositories..."
+echo "[$APPNAME] - [$(date)] - Updating package sources with newly added repositories..."
 apt-get -qq update
 echo ""
 
 # Upgrade Debian/Ubuntu packages without install recommended packages
-echo "[$APPNAME] - Upgrading $DISTNAME packages..."
+echo "[$APPNAME] - [$(date)] - Upgrading $DISTNAME packages..."
 #apt-get upgrade -qy --no-install-recommends
 echo ""
 
 # Install Debian/Ubuntu packages
-echo "[$APPNAME] - Installing Debian packages needed for Cloudy..."
+echo "[$APPNAME] - [$(date)] - Installing Debian packages needed for Cloudy..."
 while IFS=': ' read name pkgs;
 do
-	echo "[$APPNAME] - Installing packages required by $name"
+	echo "[$APPNAME] - [$(date)] - Installing packages required by $name"
 	apt-get install -yq $pkgs
 done < <($CURL -s $LBMAKEPACKAGES-$RELEASENAME)
 echo ""
 
 # Install Cloudy packages
-echo "[$APPNAME] - Installing Cloudy software packages..."
+echo "[$APPNAME] - [$(date)] - Installing Cloudy software packages..."
 for i in $CLOUDYPACKAGES
 do
 	$CURL -s ${LBMAKEHOOKSPATHURL}$i |ARCH=$ARCH sh -
@@ -159,22 +167,22 @@ done
 echo ""
 
 # Call the function named as the release to perform release-specific changes
-echo "[$APPNAME] - Performing specific changes for $DISTNAME $RELEASENAME..."
+echo "[$APPNAME] - [$(date)] - Performing specific changes for $DISTNAME $RELEASENAME..."
 [ "$(type -t $RELEASENAME)" == "function" ] && $RELEASENAME
 
 # Detect and save default network interface configuration
-echo "[$APPNAME] - Detecting the primary network interface..."
-echo "[$APPNAME] - The primary network interface is $(get_primary_network_interface). Saving it..."
+echo "[$APPNAME] - [$(date)] - Detecting the primary network interface..."
+echo "[$APPNAME] - [$(date)] - The primary network interface is $(get_primary_network_interface). Saving it..."
 echo "PRIMARYINTERFACE=\"$(get_primary_network_interface)\"" >> /etc/cloudy/cloudy.conf
 echo ""
 
 # Start Cloudy daemons
-echo "[$APPNAME] - Starting Cloudy web interface..."
+echo "[$APPNAME] - [$(date)] - Starting Cloudy web interface..."
 /etc/init.d/cdistro stop
 /etc/init.d/cdistro start
 echo ""
 
-echo "[$APPNAME] - Starting Serf..."
+echo "[$APPNAME] - [$(date)] - Starting Serf..."
 /etc/init.d/serf stop
 /etc/init.d/serf start
 echo ""

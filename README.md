@@ -15,5 +15,7 @@ From your Debian system run, as root:
 apt-get update; apt-get install -y curl lsb-release
 curl -k https://raw.githubusercontent.com/Clommunity/cloudynitzar/master/cloudynitzar.sh | bash -
 ````
+and let the magic begin! After the process has finished, you can browse the Cloudy web interface at [http://cloudy_device_ip:7000](http://cloudy_device_ip:7000).
 
-and let the magic begin!
+### Log
+The output of the whole Cloudynitzar process is logged to `/var/log/cloudy/cloudynitzar.log`.
