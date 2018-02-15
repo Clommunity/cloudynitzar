@@ -182,7 +182,6 @@ echo "[$APPNAME] - [$(date)] - Starting Cloudy web interface..."
 /etc/init.d/cdistro start
 echo ""
 
-echo "[$APPNAME] - [$(date)] - Starting Serf..."
-/etc/init.d/serf stop
-/etc/init.d/serf start
+echo "[$APPNAME] - [$(date)] - Starting (restarting) Serf..."
+/etc/init.d/serf restart
 echo ""
