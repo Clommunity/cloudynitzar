@@ -28,7 +28,7 @@ SOURCESLISTDDIR=/etc/apt/sources.list.d/
 LBMAKEPACKAGES="https://raw.githubusercontent.com/Clommunity/lbmake/master/packages"
 
 # List of Cloudy packages to install
-CLOUDYPACKAGES="cDistro.chroot serf.chroot ipfs.chroot"
+CLOUDYPACKAGES="cDistro.chroot avahi-ps.chroot serf.chroot ipfs.chroot"
 
 # List of deprecated Cloudy packages not to be installed
 OLDCLOUDYPACKAGES="getinconf-client.chroot"
