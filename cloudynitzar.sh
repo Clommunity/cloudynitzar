@@ -34,8 +34,17 @@ CLOUDYPACKAGES="cDistro.chroot avahi-ps.chroot serf.chroot ipfs.chroot"
 OLDCLOUDYPACKAGES="getinconf-client.chroot"
 
 # List of required Debian/Ubuntu packages for the Cloudynization process
-DEBREQPACKAGES="curl unzip dirmngr"
 
+case $RELEASENAME in
+  bionic)
+# Take care installing php-ssh2, you could lose your user password
+# Follow instructions in this link in order to recovery it: https://askubuntu.com/questions/24006/how-do-i-reset-a-lost-administrative-password
+    DEBREQPACKAGES="curl unzip dirmngr net-tools php php-ssh2"
+    ;;
+  *)
+    DEBREQPACKAGES="curl unzip dirmngr"
+    ;;
+esac
 # URL for lbmake's package hooks' path
 LBMAKEHOOKSPATHURL="https://raw.githubusercontent.com/Clommunity/lbmake/master/hooks/"
 
