@@ -19,3 +19,13 @@ and let the magic begin! After the process has finished, you can browse the Clou
 
 ### Log
 The output of the whole Cloudynitzar process is logged to `/var/log/cloudy/cloudynitzar.log`.
+```
+
+If you want to "cloudinizer" a few machines then you should add hostnames in host file and launch:
+
+**NOTE:** For go ahead with this step you will need [Ansible](https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html)
+
+```sh
+ansible-playbook -i hosts playbook.yml --ask-pass --extra-vars "hosts=cloudy user=your_user_name"
+``
+
