@@ -1,0 +1,22 @@
+---
+- hosts: "{{ hosts }}"
+  remote_user: "{{ user }}"
+  become: yes
+  tasks:
+    - name: Update repositories cache
+      apt:
+        name: "{{ packages }}"
+        state: latest
+        update_cache: yes
+      vars:
+        packages:
+          - curl 
+          - lsb-release
+    
+    - name: Install Cloudy
+      shell: sudo curl -k https://raw.githubusercontent.com/Clommunity/cloudynitzar/master/cloudynitzar.sh | sudo bash -
+      args:
+        warn: False
+
+
+

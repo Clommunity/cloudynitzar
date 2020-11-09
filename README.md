@@ -11,11 +11,24 @@ Cloudynitzar will also work on a Debian 8 *Jessie* installation, on a Debian *Bu
 ### Procedure
 From your Debian system run, as root:
 
-````sh
+```sh
 apt-get update; apt-get install -y curl lsb-release
 curl -k https://raw.githubusercontent.com/Clommunity/cloudynitzar/master/cloudynitzar.sh | bash -
-````
+```
+
 and let the magic begin! After the process has finished, you can browse the Cloudy web interface at [http://cloudy_device_ip:7000](http://cloudy_device_ip:7000).
+
+In order to Cloudynitzar  serveral machines you can use Ansible:
+
+- The first step that you must do is add your hosts on [hosts file](./hosts)
+- Then, you should launch the next command:
+
+```sh
+asible-playbook -i hosts playbook.yml --ask-pass --extra-vars "hosts=cloudy user=your_user_name"
+```
+
+**NOTE:** To proceed with this step you will need [Ansible](https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html) installed.
 
 ### Log
 The output of the whole Cloudynitzar process is logged to `/var/log/cloudy/cloudynitzar.log`.
+
