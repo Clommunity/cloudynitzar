@@ -24,7 +24,7 @@ In order to Cloudynitzar  serveral machines you can use Ansible:
 - Then, you should launch the next command:
 
 ```sh
-asible-playbook -i hosts playbook.yml --ask-pass --extra-vars "hosts=cloudy user=your_user_name"
+ansible-playbook -i hosts playbook.yml --ask-pass --extra-vars "hosts=cloudy user=your_user_name"
 ```
 
 **NOTE:** To proceed with this step you will need [Ansible](https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html) installed.
