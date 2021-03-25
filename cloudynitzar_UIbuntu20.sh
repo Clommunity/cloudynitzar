@@ -34,7 +34,7 @@ CLOUDYPACKAGES="cDistro.chroot avahi-ps.chroot serf.chroot ipfs.chroot"
 OLDCLOUDYPACKAGES="getinconf-client.chroot"
 
 # List of required Debian/Ubuntu packages for the Cloudynization process
-DEBREQPACKAGES="curl unzip dirmngr iproute2"
+DEBREQPACKAGES="curl unzip dirmngr iproute2 net-tools"
 
 # URL for lbmake's package hooks' path
 LBMAKEHOOKSPATHURL="https://raw.githubusercontent.com/Clommunity/lbmake/master/hooks/"
