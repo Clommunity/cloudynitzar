@@ -38,6 +38,17 @@
       - php-curl
     when: ansible_distribution_release == "bionic"
 
+  - name: Install Debian 10 dependant packages.
+    apt:
+      name: "{{ bionic_packages }}"
+      state: present
+      update_cache: no
+    vars:
+      bionic_packages:
+      - php-sqlite3
+      - php-curl
+    when: ansible_distribution_release == "buster"
+
   - name: Install Focal 20 dependant packages
     apt:
       name: "{{ focal_packages }}"
