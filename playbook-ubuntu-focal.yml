@@ -1,0 +1,54 @@
+---
+- hosts: all
+  become: yes
+  tasks:
+  - name: Install packages
+    apt:
+      name: "{{ packages }}"
+      state: present
+      update_cache: yes
+    vars:
+      packages:
+      - unzip
+      - curl
+      - dirmngr
+      - iproute2
+      - openssh-server
+      - openssh-client
+      - make
+      - jq
+      - tahoe-lafs
+      - python2.7
+      - g++
+      - checkinstall
+      - locales
+      - php
+      - php-ssh2
+      - php5-sqlite
+      - php5-curl
+      - libapache2-mod-encoding
+
+  - name: Run cDistro script
+    script: cDistro.chroot
+
+  - name: Run avahi script
+    script: avahi-ps.chroot
+
+  - name: Run serf script
+    script: serf.chroot
+
+  - name: Run ipfs script
+    script: ipfs.chroot
+
+  - name: Call the function named as the release to perform release-specific changes
+
+  - name: Set primary network interface
+
+  - name: Stop cloudy daemon
+    script: /etc/init.d/cdistro stop
+
+  - name: Start cloudy daemon
+    script: /etc/init.d/cdistro start
+
+  - name: Start serf daemon
+    script: /etc/init.d/serf restart

@@ -1,0 +1,23 @@
+#!/bin/bash
+
+GH_USER=Clommunity
+GH_REPO=package-ipfs
+BZIP2NAME="ipfs.bz2"
+BINNAME=ipfs
+BRANCH=master
+
+curl "https://codeload.github.com/${GH_USER}/${GH_REPO}/zip/${BRANCH}" > ${GH_REPO}.zip
+unzip ${GH_REPO}.zip
+cd ${GH_REPO}-${BRANCH}/
+
+make install
+
+cd ..
+
+# Removing files
+rm -rf ${GH_REPO}.zip ${GH_REPO}-master
+
+# Update info
+mkdir -p /etc/cloudy
+mkdir -p /etc/cloudy/ipfs/
+curl -s https://api.github.com/repos/$GH_USER/$GH_REPO/git/refs/heads/master | grep 'sha'|awk -F':' '{print $2}'|awk -F'"' '{print $2}' > /etc/cloudy/${GH_USER}-${GH_REPO}.sha

@@ -1,0 +1,63 @@
+#!/bin/sh
+SERF_CRON="/etc/cron.d/serf-reload"
+UNKNOWN_IP="Unknown"
+CLOUDYCONF="/etc/cloudy/cloudy.conf"
+BRANCH="master"
+SERFBIN=
+
+curl -k "https://codeload.github.com/Clommunity/cDistro/zip/${BRANCH}" > cDistro.zip
+unzip cDistro.zip
+cd cDistro-${BRANCH}
+make install
+cd ..
+rm -rf cDistro-${BRANCH} cDistro.zip
+
+if $(fgrep -q "PORT_SSL" $CLOUDYCONF)
+then
+   sed -i -e 's/BINDIP="0.0.0.0"/BINDIP="127.0.0.1"/' $CLOUDYCONF
+else
+   sed -i -e 's/BINDIP="127.0.0.1"/BINDIP="0.0.0.0"/' $CLOUDYCONF
+fi
+
+if [ -f /etc/cdistro.conf ]
+then
+   mv -f /etc/cdistro.conf $CLOUDYCONF
+fi
+
+update-rc.d cdistro defaults
+
+# Remove cron system
+if [ -f /etc/cron.d/getinconf-client ]
+then
+   rm -f /etc/cron.d/getinconf-client
+fi
+
+# Active GETINCONF_IGNORE
+
+if [ "$(cat /etc/getinconf-client.conf|grep -e '^GETINCONF_IGNORE=1$'|wc -l)" -eq 0 ]
+then
+   echo "GETINCONF_IGNORE=1" >> /etc/getinconf-client.conf
+fi
+
+if [ ! -f $SERF_CRON ]
+then
+   echo "0 *   * * *   root    [ -x /etc/init.d/serf ] && /etc/init.d/serf start > /dev/null 2>&1" > $SERF_CRON
+fi
+
+# Remove some files
+rmfiles="plug/controllers/caracal-api.php plug/controllers/caracal.php plug/controllers/gvod.php plug/controllers/sweep.php plug/controllers/etcd.php plug/menus/caracal-api.menu.php plug/menus/caracal.menu.php plug/menus/gvod.menu.php plug/menus/sweep.menu.php plug/menus/etcd.menu.php plug/menus/etcd.lookfor.menu.php.disable plug/menus/etcd.lookfor.menu.php"
+for i in $rmfiles
+do
+	file="/var/local/cDistro/$i"
+  if [ -f $file ]
+	then
+		rm -f $file
+	fi
+done
+
+# Update info
+COMMUNITY=Clommunity
+REPOSITORY=cDistro
+mkdir -p /etc/cloudy
+curl -k https://api.github.com/repos/$COMMUNITY/$REPOSITORY/git/refs/heads/master | grep 'sha'|awk -F':' '{print $2}'|awk -F'"' '{print $2}' > /etc/cloudy/${COMMUNITY}-${REPOSITORY}.sha
+

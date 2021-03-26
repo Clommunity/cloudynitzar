@@ -1,0 +1,15 @@
+#!/bin/sh
+
+curl "https://codeload.github.com/Clommunity/avahi-ps/zip/master" > avahi-ps.zip
+unzip avahi-ps.zip
+cd avahi-ps-master
+make install
+cd ..
+rm -rf avahi-ps-master avahi-ps.zip
+
+# Update info
+COMMUNITY=Clommunity
+REPOSITORY=avahi-ps
+mkdir -p /etc/cloudy
+curl -s https://api.github.com/repos/$COMMUNITY/$REPOSITORY/git/refs/heads/master | grep 'sha'|awk -F':' '{print $2}'|awk -F'"' '{print $2}' > /etc/cloudy/${COMMUNITY}-${REPOSITORY}.sha
+
