@@ -42,7 +42,14 @@
 
   - name: Call the function named as the release to perform release-specific changes
 
+  - name: Get the primary network interface
+    command: route | grep '^default' | grep -o '[^ ]*$'
+    register: primary-iface
+
   - name: Set primary network interface
+    lineinfile:
+      path: /etc/cloudy/cloudy.conf
+      line: PRIMARYINTERFACE="{{ primary-iface }}"
 
   - name: Stop cloudy daemon
     script: /etc/init.d/cdistro stop
