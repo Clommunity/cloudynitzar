@@ -24,8 +24,8 @@
       - locales
       - php
       - php-ssh2
-      - php5-sqlite
-      - php5-curl
+      - php-sqlite3
+      - php-curl
       - libapache2-mod-encoding
       - git
 
