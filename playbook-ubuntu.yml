@@ -60,17 +60,41 @@
       - php5-curl
     when: ansible_distribution_release == "focal"
 
+  - name: Download cDistro script
+    get_url:
+      url: https://raw.githubusercontent.com/Clommunity/lbmake/master/hooks/cDistro.chroot
+      dest: /etc/cDistro.chroot
+      mode: '0777'
+
+  - name: Download avahi-ps script
+    get_url:
+      url: https://raw.githubusercontent.com/Clommunity/lbmake/master/hooks/avahi-ps.chroot
+      dest: /etc/avahi-ps.chroot
+      mode: '0777'
+
+  - name: Download serf script
+    get_url:
+      url: https://raw.githubusercontent.com/Clommunity/lbmake/master/hooks/serf.chroot
+      dest: /etc/serf.chroot
+      mode: '0777'
+
+  - name: Download ipfs script
+    get_url:
+      url: https://raw.githubusercontent.com/Clommunity/lbmake/master/hooks/ipfs.chroot
+      dest: /etc/ipfs.chroot
+      mode: '0777'
+    
   - name: Run cDistro script
-    script: cDistro.chroot
+    shell: /etc/cDistro.chroot
 
   - name: Run avahi script
-    script: avahi-ps.chroot
+    shell: /etc/avahi-ps.chroot
 
   - name: Run serf script
-    script: serf.chroot
+    shell: /etc/serf.chroot
 
   - name: Run ipfs script
-    script: ipfs.chroot
+    shell: /etc/ipfs.chroot
 
   - name: Set primary network interface
     lineinfile:
