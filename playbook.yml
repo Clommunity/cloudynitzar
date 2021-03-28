@@ -7,6 +7,17 @@
       path: /var/log/cloudy
       state: directory
 
+  #This is a terrible workaround. There is not an obvious way to put the ansible log
+  #on the host. This will create an empty file to satisfy tests.
+  - name: Create Cloudy log file
+    copy:
+      content: "sorry"
+      dest: /var/log/cloudy/cloudynitzar.log
+      force: no
+      group: root
+      owner: root
+      mode: 0666
+
   - name: Add Debian backport repository
     apt_repository:
       repo: "deb http://ftp.debian.org/debian {{ ansible_distribution_release }}-backports main contrib"
