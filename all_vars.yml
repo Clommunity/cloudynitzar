@@ -1,0 +1,4 @@
+---
+cloudy_username: cloudy
+# created with ` python -c 'import crypt; print crypt.crypt("cloudy", "$1$Cloudy21$")' `
+cloudy_password: $1$Cloudy21$sG6Xn.TYOjEao3LckF9Ug1
