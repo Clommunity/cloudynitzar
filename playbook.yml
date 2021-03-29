@@ -2,6 +2,14 @@
 - hosts: all
   become: yes
   tasks:
+  - name: Create cloudy user
+    user:
+      name: cloudy
+      # created with ` python -c 'import crypt; print crypt.crypt("This is my Password", "$1$Cloudy21$")' `
+      password: $1$Cloudy21$sG6Xn.TYOjEao3LckF9Ug1
+      shell: /bin/bash
+      group: sudo
+
   - name: Create Cloudy log directory
     file:
       path: /var/log/cloudy
