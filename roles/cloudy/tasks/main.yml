@@ -24,12 +24,8 @@ tasks:
       owner: root
       mode: 0666
 
-  - name: Add Debian backport repository
-    apt_repository:
-      repo: "deb http://ftp.debian.org/debian {{ ansible_distribution_release }}-backports main contrib"
-      state: present
-      update_cache: no
-    when: ansible_distribution == "Debian"
+  - name: Add distro specific repos
+    include_tasks: "{{ ansible_distribution }}-repos.yml"
 
   - name: Add Clommunity repository
     apt_repository:
