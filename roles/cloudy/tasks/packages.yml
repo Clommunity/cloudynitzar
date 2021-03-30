@@ -1,0 +1,58 @@
+---
+- name: Install release independent packages
+  apt:
+    name: "{{ packages }}"
+    state: present
+    update_cache: no
+  vars:
+    packages:
+    - unzip
+    - curl
+    - dirmngr
+    - iproute2
+    - openssh-server
+    - openssh-client
+    - make
+    - jq
+    - tahoe-lafs
+    - python2.7
+    - g++
+    - checkinstall
+    - locales
+    - php
+    - php-ssh2
+    - libapache2-mod-encoding
+    - git
+      
+- name: Install Debian 10 dependant packages.
+  apt:
+    name: "{{ bionic_packages }}"
+    state: present
+    update_cache: no
+  vars:
+    bionic_packages:
+    - php-sqlite3
+    - php-curl
+  when: ansible_distribution_release == "buster"
+
+- name: Install Focal 20 dependant packages
+  apt:
+    name: "{{ focal_packages }}"
+    state: present
+    update_cache: no
+  vars:
+    focal_packages:
+    - php5-sqlite
+    - php5-curl
+  when: ansible_distribution_release == "focal"
+
+- name: Install Bionic 18 dependant packages
+  apt:
+    name: "{{ bionic_packages }}"
+    state: present
+    update_cache: no
+  vars:
+    bionic_packages:
+    - php-sqlite3
+    - php-curl
+  when: ansible_distribution_release == "bionic"

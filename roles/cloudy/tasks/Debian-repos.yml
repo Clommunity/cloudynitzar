@@ -1,6 +1,0 @@
----
-- name: Add Debian backport repository
-  apt_repository:
-    repo: "deb http://ftp.debian.org/debian {{ ansible_distribution_release }}-backports main contrib"
-    state: present
-    update_cache: no

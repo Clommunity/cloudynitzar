@@ -1,86 +1,33 @@
 ---
 # tasks file for cloudy
-tasks:
-  - name: Create cloudy user
-    user:
-      name: "{{ cloudy_username }}"
-      password: "{{ cloudy_password }}"
-      shell: /bin/bash
-      group: sudo
+- name: Create cloudy user
+  user:
+    name: "{{ cloudy_username }}"
+    password: "{{ cloudy_password }}"
+    shell: /bin/bash
+    group: sudo
 
-  - name: Create Cloudy log directory
-    file:
-      path: /var/log/cloudy
-      state: directory
+- name: Create Cloudy log directory
+  file:
+    path: /var/log/cloudy
+    state: directory
 
-  #This is a terrible workaround. There is not an obvious way to put the ansible log
-  #on the host. This will create an empty file to satisfy tests.
-  - name: Create Cloudy log file
-    copy:
-      content: "sorry"
-      dest: /var/log/cloudy/cloudynitzar.log
-      force: no
-      group: root
-      owner: root
-      mode: 0666
+#This is a terrible workaround. There is not an obvious way to put the ansible log
+#on the host. This will create an empty file to satisfy tests.
+- name: Create Cloudy log file
+  copy:
+    content: "sorry"
+    dest: /var/log/cloudy/cloudynitzar.log
+    force: no
+    group: root
+    owner: root
+    mode: 0666
 
-  - name: Add distro specific repos
-    include_tasks: "{{ ansible_distribution }}-repos.yml"
+- name: Add repos
+  include_tasks: "repos.yml"
 
-  - name: Add Clommunity repository
-    apt_repository:
-      repo: deb http://repo.clommunity-project.eu/debian unstable/
-      state: present
-      filename: cloudy
-      update_cache: no
+- name: Install packages
+  include_tasks: "packages.yml"
 
-  - name: Add key for Clommunity
-    shell: gpg --keyserver keys.gnupg.net --recv-key A59C5DC8 && gpg --export --armor A59C5DC8 | sudo apt-key add -
-
-  - name: Add Guifi repository
-    apt_repository:
-      repo: deb http://serveis.guifi.net/debian guifi/
-      state: present
-      filename: guifi
-      update_cache: no
-
-  - name: Add key for Guifi
-    shell: gpg --keyserver keys.gnupg.net --recv-key 2E484DAB && gpg --export --armor 2E484DAB | sudo apt-key add -
-
-  #We update the cache seperately because the Guifi repo fails due to a GPG error. 
-  #The failure occurs when using the original cloudynitzar script.
-  - name: Update apt packages
-    apt:
-      update_cache: yes
-    ignore_errors: yes
-
-  - name: Install release independent packages
-    apt:
-      name: "{{ packages }}"
-      state: present
-      update_cache: no
-    vars:
-      packages:
-      - unzip
-      - curl
-      - dirmngr
-      - iproute2
-      - openssh-server
-      - openssh-client
-      - make
-      - jq
-      - tahoe-lafs
-      - python2.7
-      - g++
-      - checkinstall
-      - locales
-      - php
-      - php-ssh2
-      - libapache2-mod-encoding
-      - git
-
-  - name: Do release specific packages
-    include_tasks: "{{ ansible_distribution_release }}-packages.yml"
-
-  - name: Install the Cloudy packages
-    include_tasks: "cloudy-install.yml"
+- name: Install the Cloudy packages
+  include_tasks: "cloudy-install.yml"

@@ -1,51 +1,51 @@
 ---
-  - name: Download cDistro script
-    get_url:
-      url: https://raw.githubusercontent.com/Clommunity/lbmake/master/hooks/cDistro.chroot
-      dest: /etc/cDistro.chroot
-      mode: '0777'
+- name: Download cDistro script
+  get_url:
+    url: https://raw.githubusercontent.com/Clommunity/lbmake/master/hooks/cDistro.chroot
+    dest: /etc/cDistro.chroot
+    mode: '0777'
 
-  - name: Download avahi-ps script
-    get_url:
-      url: https://raw.githubusercontent.com/Clommunity/lbmake/master/hooks/avahi-ps.chroot
-      dest: /etc/avahi-ps.chroot
-      mode: '0777'
+- name: Download avahi-ps script
+  get_url:
+    url: https://raw.githubusercontent.com/Clommunity/lbmake/master/hooks/avahi-ps.chroot
+    dest: /etc/avahi-ps.chroot
+    mode: '0777'
 
-  - name: Download serf script
-    get_url:
-      url: https://raw.githubusercontent.com/Clommunity/lbmake/master/hooks/serf.chroot
-      dest: /etc/serf.chroot
-      mode: '0777'
+- name: Download serf script
+  get_url:
+    url: https://raw.githubusercontent.com/Clommunity/lbmake/master/hooks/serf.chroot
+    dest: /etc/serf.chroot
+    mode: '0777'
 
-  - name: Download ipfs script
-    get_url:
-      url: https://raw.githubusercontent.com/Clommunity/lbmake/master/hooks/ipfs.chroot
-      dest: /etc/ipfs.chroot
-      mode: '0777'
+- name: Download ipfs script
+  get_url:
+    url: https://raw.githubusercontent.com/Clommunity/lbmake/master/hooks/ipfs.chroot
+    dest: /etc/ipfs.chroot
+    mode: '0777'
+  
+- name: Run cDistro script
+  shell: /etc/cDistro.chroot
+
+- name: Run avahi script
+  shell: /etc/avahi-ps.chroot
+
+- name: Run serf script
+  shell: /etc/serf.chroot
+
+- name: Run ipfs script
+  shell: /etc/ipfs.chroot
+
+- name: Set primary network interface
+  lineinfile:
+    path: /etc/cloudy/cloudy.conf
+    line: PRIMARYINTERFACE="{{ ansible_default_ipv4.interface }}"
+
+- name: Restart cloudy daemon
+  service: 
+    name: cdistro
+    state: restarted
     
-  - name: Run cDistro script
-    shell: /etc/cDistro.chroot
-
-  - name: Run avahi script
-    shell: /etc/avahi-ps.chroot
-
-  - name: Run serf script
-    shell: /etc/serf.chroot
-
-  - name: Run ipfs script
-    shell: /etc/ipfs.chroot
-
-  - name: Set primary network interface
-    lineinfile:
-      path: /etc/cloudy/cloudy.conf
-      line: PRIMARYINTERFACE="{{ ansible_default_ipv4.interface }}"
-
-  - name: Restart cloudy daemon
-    service: 
-      name: cdistro
-      state: restarted
-      
-  - name: Start serf daemon
-    service: 
-      name: serf
-      state: started
+- name: Start serf daemon
+  service: 
+    name: serf
+    state: started

@@ -1,0 +1,34 @@
+---
+- name: Add Debian backport repository
+  apt_repository:
+    repo: "deb http://ftp.debian.org/debian {{ ansible_distribution_release }}-backports main contrib"
+    state: present
+    update_cache: no
+  when: ansible_distribution == "Debian"
+
+- name: Add Clommunity repository
+  apt_repository:
+    repo: deb http://repo.clommunity-project.eu/debian unstable/
+    state: present
+    filename: cloudy
+    update_cache: no
+
+- name: Add key for Clommunity
+  shell: gpg --keyserver keys.gnupg.net --recv-key A59C5DC8 && gpg --export --armor A59C5DC8 | sudo apt-key add -
+
+- name: Add Guifi repository
+  apt_repository:
+    repo: deb http://serveis.guifi.net/debian guifi/
+    state: present
+    filename: guifi
+    update_cache: no
+
+- name: Add key for Guifi
+  shell: gpg --keyserver keys.gnupg.net --recv-key 2E484DAB && gpg --export --armor 2E484DAB | sudo apt-key add -
+
+#We update the cache seperately because the Guifi repo fails due to a GPG error. 
+#The failure occurs when using the original cloudynitzar script.
+- name: Update apt packages
+  apt:
+    update_cache: yes
+  ignore_errors: yes
