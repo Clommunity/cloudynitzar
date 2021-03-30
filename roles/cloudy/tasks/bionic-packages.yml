@@ -1,0 +1,10 @@
+---
+- name: Install Bionic 18 dependant packages
+  apt:
+    name: "{{ bionic_packages }}"
+    state: present
+    update_cache: no
+  vars:
+    bionic_packages:
+    - php-sqlite3
+    - php-curl

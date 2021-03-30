@@ -83,38 +83,8 @@ tasks:
       - libapache2-mod-encoding
       - git
 
-  - name: Install Bionic 18 dependant packages
-    apt:
-      name: "{{ bionic_packages }}"
-      state: present
-      update_cache: no
-    vars:
-      bionic_packages:
-      - php-sqlite3
-      - php-curl
-    when: ansible_distribution_release == "bionic"
-
-  - name: Install Debian 10 dependant packages.
-    apt:
-      name: "{{ bionic_packages }}"
-      state: present
-      update_cache: no
-    vars:
-      bionic_packages:
-      - php-sqlite3
-      - php-curl
-    when: ansible_distribution_release == "buster"
-
-  - name: Install Focal 20 dependant packages
-    apt:
-      name: "{{ focal_packages }}"
-      state: present
-      update_cache: no
-    vars:
-      focal_packages:
-      - php5-sqlite
-      - php5-curl
-    when: ansible_distribution_release == "focal"
+  - name: Do release specific packages
+    include_tasks: "{{ ansible_distribution_release }}-packages.yml"
 
   - name: Download cDistro script
     get_url:
