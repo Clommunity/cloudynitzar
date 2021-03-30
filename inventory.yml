@@ -1,0 +1,12 @@
+---
+all:
+  children:
+    #Every host has cloudy installed but some hosts can be Cloudy only, no Kubernetes.
+    cloudy_only:
+      hosts:
+    kubernetes:
+      children:
+        master:
+          hosts:
+        workers:
+          hosts:

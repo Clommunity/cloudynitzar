@@ -32,3 +32,16 @@ ansible-playbook -i hosts playbook.yml --ask-pass --extra-vars "hosts=cloudy use
 ### Log
 The output of the whole Cloudynitzar process is logged to `/var/log/cloudy/cloudynitzar.log`.
 
+## Ansible and Deployment
+
+Ansible is an extremely powerful tool that can automate all stages of a deployment lifecycle. 
+
+### Inventory
+
+We seperate inventory into three groups: Cloudy only hosts, K3s masters, and K3s workers.
+
+### Roles
+
+* k3s-workers
+* k3s-master
+* cloudy
