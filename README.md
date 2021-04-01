@@ -34,14 +34,51 @@ The output of the whole Cloudynitzar process is logged to `/var/log/cloudy/cloud
 
 ## Ansible and Deployment
 
+ansible-galaxy install xanmanning.k3s
+
 Ansible is an extremely powerful tool that can automate all stages of a deployment lifecycle. 
+
+python-apt must be installed to use check mode
+
+### Use Cases and Workflows
+
+* Convert a base OS install into a Cloudy node
+* Convert one or more Cloudy nodes into a Kubernetes cluster
+* Add or remove nodes from an existing Kubernetes cluster
+
+base-to-cloudy-playbook.yml
+cloudy-nodes-to-kube-cluster.yml
+add-remove-kube-nodes.yml
+
+
 
 ### Inventory
 
 We seperate inventory into three groups: Cloudy only hosts, K3s masters, and K3s workers.
 
+By grouping inventory like this we can target only specific subsets of all hosts. 
+
 ### Roles
 
-* k3s-workers
-* k3s-master
-* cloudy
+The roles/ directory contains the Ansible roles.
+
+The directory structure is
+
+```
+group_vars/
+    Variable files defined per inventory group
+roles/
+    <role_name>/
+        meta/
+            Metadata for Ansible Galaxy.
+        tasks/
+            Task files
+        vars/
+            Variables files
+```
+
+The current roles are:
+
+    * k3s-worker: A worker node.
+    * k3s-master: k3s node acting as the master. All worker nodes must join via the master.
+    * cloudy: A host with cloudy installed. This is currently (30-Mar-2021) applied to all hosts.

@@ -5,8 +5,13 @@ all:
     cloudy_only:
       hosts:
     kubernetes:
-      children:
-        master:
-          hosts:
-        workers:
-          hosts:
+      hosts:
+        raspberrypi:
+          ansible_user: pi
+          ansible_host: 10.149.18.31
+        cloudy-vm1:
+          ansible_user: vagrant
+          ansible_host: 10.149.121.89
+        honeybee:
+          ansible_user: honeybee
+          ansible_host: 10.149.122.106

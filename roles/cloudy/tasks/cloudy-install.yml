@@ -39,13 +39,19 @@
   lineinfile:
     path: /etc/cloudy/cloudy.conf
     line: PRIMARYINTERFACE="{{ ansible_default_ipv4.interface }}"
+  #This task doesnt work in check mode because cloudy.conf is created in a task skipped in check mode
+  ignore_errors: "{{ ansible_check_mode }}"
 
 - name: Restart cloudy daemon
   service: 
     name: cdistro
     state: restarted
+  #This service is installed earlier in this playbook
+  ignore_errors: "{{ ansible_check_mode }}"
     
 - name: Start serf daemon
   service: 
     name: serf
     state: started
+  #This service is installed earlier in this playbook
+  ignore_errors: "{{ ansible_check_mode }}"
