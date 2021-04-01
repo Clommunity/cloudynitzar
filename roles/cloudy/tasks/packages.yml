@@ -14,7 +14,6 @@
     - openssh-client
     - make
     - jq
-    - tahoe-lafs
     - python2.7
     - g++
     - checkinstall
@@ -33,6 +32,7 @@
     bionic_packages:
     - php-sqlite3
     - php-curl
+    - tahoe-lafs
   when: ansible_distribution_release == "buster"
 
 - name: Install Focal 20 dependant packages
@@ -55,4 +55,5 @@
     bionic_packages:
     - php-sqlite3
     - php-curl
+    - tahoe-lafs
   when: ansible_distribution_release == "bionic"
