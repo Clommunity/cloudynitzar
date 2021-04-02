@@ -34,29 +34,31 @@ The output of the whole Cloudynitzar process is logged to `/var/log/cloudy/cloud
 
 ## Ansible and Deployment
 
-ansible-galaxy install xanmanning.k3s
+The included Vagrantfile can be used to quickly spin up a compatible VM. Requires vagrant and virtualbox to be installed. This is very useful for testing.
 
-Ansible is an extremely powerful tool that can automate all stages of a deployment lifecycle. 
+Install Ansible via pip/pip3 to ensure the latest version is installed.
 
-python-apt must be installed to use check mode
+`pip install ansible`
 
-### Use Cases and Workflows
+To install the required role:
 
-* Convert a base OS install into a Cloudy node
-* Convert one or more Cloudy nodes into a Kubernetes cluster
-* Add or remove nodes from an existing Kubernetes cluster
+`ansible-galaxy install xanmanning.k3s`
 
-base-to-cloudy-playbook.yml
-cloudy-nodes-to-kube-cluster.yml
-add-remove-kube-nodes.yml
+python-apt must be installed on each inventory host to use check mode
 
+`sudo apt install python-apt`
 
+Check mode performs basic debug checks on each host.
+
+`ansible-playbook -i inventory.yml playbook.yml --check`
+
+Login once to each machine or add them to your ~/.ssh/known_hosts file. Ansible will throw an error when SSH asks you to verify a host.
 
 ### Inventory
 
-We seperate inventory into three groups: Cloudy only hosts, K3s masters, and K3s workers.
+***MAKE SURE TO CHANGE inventory.yml TO MATCH YOUR ENVIRONMENT***
 
-By grouping inventory like this we can target only specific subsets of all hosts. 
+We seperate inventory based on whether it is a Kubernetes node or Cloudy only node.
 
 ### Roles
 
@@ -76,9 +78,3 @@ roles/
         vars/
             Variables files
 ```
-
-The current roles are:
-
-    * k3s-worker: A worker node.
-    * k3s-master: k3s node acting as the master. All worker nodes must join via the master.
-    * cloudy: A host with cloudy installed. This is currently (30-Mar-2021) applied to all hosts.

@@ -44,6 +44,7 @@
     focal_packages:
     - php-sqlite3
     - php-curl
+    - net-tools
   when: ansible_distribution_release == "focal"
 
 - name: Install Bionic 18 dependant packages
