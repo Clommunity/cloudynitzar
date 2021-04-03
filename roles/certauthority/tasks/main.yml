@@ -2,15 +2,25 @@
 # tasks file for certauthority
 - name: Create CA directory
   file:
-    path: /etc/ca
+    path: "{{ ca_request_path }}"
     mode: '0700'
     state: directory
 
 - name: Generate a key pair
-  shell: ssh-keygen -C "CA for Cloudy cluster" -f /etc/ca/ca
+  shell: "ssh-keygen -C \"CA for Cloudy cluster\" -f {{ ca_private_key_location }} -N \"\""
+
+- name: Set permissions for CA private key
+  file:
+    path: "{{ ca_private_key_location }}"
+    mode: '0700'
+
+- name: Set permissions for CA public key
+  file:
+    path: "{{ ca_public_key_location }}"
+    mode: '0700'
 
 #We call the tasks in request.yml for each host
-- include_tasks: request.yml
-  with_items: all:!CA
+- include_tasks: "request.yml"
+  with_items: "{{ query('inventory_hostnames', 'all:!certauthority') }}"
   loop_control:
     loop_var: request_host

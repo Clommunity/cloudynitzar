@@ -1,2 +1,10 @@
 ---
 # vars file for certauthority
+ca_request_path: "/home/leena/ca"
+ca_private_key_location: "{{ ca_request_path }}/ca_rsa"
+ca_public_key_location: "{{ ca_request_path }}/ca_rsa.pub"
+
+identities: 
+principals:
+serial:
+valid_weeks:

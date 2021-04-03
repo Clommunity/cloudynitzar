@@ -4,8 +4,7 @@ all:
     certauthority:
       hosts:
         localhost:
-          vars:
-            ansible_connection: local
+          ansible_connection: local
     #Every host has cloudy installed but some hosts can be Cloudy only, no Kubernetes.
     cloudy_only:
       hosts:
