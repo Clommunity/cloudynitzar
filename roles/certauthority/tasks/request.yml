@@ -1,0 +1,55 @@
+---
+# The tasks in this playbook are called for each host
+# Remember except for tasks with delegate_to we are running on the CA host
+
+- name: Copy CA pub key from ca_host to request_host
+  synchronize:
+    src: "{{ ca_pub_key_location }}"
+    dest: /home/{{ request_host_user }}/.ssh/
+    mode: pull
+  delegate_to: "{{ request_host }}"
+
+- name: Trust root cert on request_host
+  become: yes
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    line: TrustedUserCAKeys /etc/ssh/ca.pub
+  delegate_to: "{{ request_host }}"
+
+- name: Generate id_rsa on request_host
+  shell: ssh-keygen -N "" -f "/home/{{ request_host_username }}/.ssh/id_rsa"
+  delegate_to: "{{ request_host }}"
+
+- name: Pull id_rsa.pub from request_host to ca_host
+  synchronize:
+    src: "/home/{{ host_username }}/.ssh/id_rsa.pub"
+    dest: "{{ ca_request_path }}/{{ request_host }}-id_rsa.pub" #/etc/ca/requests
+    mode: push
+  delegate_to: "{{ request_host }}"
+
+- name: Approve request on ca_host
+  shell: "ssh-keygen -s {{ ca_private_key_location }} -I {{ identities }} -n {{ principals }} -V +{{ valid_weeks }}w -z {{ serial }} {{ ca_request_path }}/{{ request_host }}-id_rsa.pub -f {{ ca_request_path }}/{{ request_host }}-cert.pub"
+
+- name: Copy cert back to request host
+  synchronize:
+    src: "{{ ca_request_path }}/{{ request_host }}-cert.pub"
+    dest: "/home/{{ host_username }}/.ssh/id_rsa-cert.pub"
+    mode: pull
+  delegate_to: "{{ request_host }}"
+
+- name: Ensure correct permissions for the cert on request_host
+  file:
+    path: /home/{{ host_username }}/.ssh/id_rsa-cert.pub"
+    mode: '0600'
+  delegate_to: "{{ request_host }}"
+
+- name: Ensure correct permissions id_rsa on request_host
+  file:
+    path: /home/{{ host_username }}/.ssh/id_rsa.pub"
+    mode: '0600'
+  delegate_to: "{{ request_host }}"
+  
+- name: Delete the public key from the ca_host
+  file:
+    path: "{{ ca_request_path }}/{{ request_host }}-id_rsa.pub"
+    state: absent

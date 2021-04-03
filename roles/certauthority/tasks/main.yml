@@ -1,0 +1,16 @@
+---
+# tasks file for certauthority
+- name: Create CA directory
+  file:
+    path: /etc/ca
+    mode: '0700'
+    state: directory
+
+- name: Generate a key pair
+  shell: ssh-keygen -C "CA for Cloudy cluster" -f /etc/ca/ca
+
+#We call the tasks in request.yml for each host
+- include_tasks: request.yml
+  with_items: all:!CA
+  loop_control:
+    loop_var: request_host

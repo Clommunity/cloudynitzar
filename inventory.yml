@@ -1,6 +1,11 @@
 ---
 all:
   children:
+    certauthority:
+      hosts:
+        localhost:
+          vars:
+            ansible_connection: local
     #Every host has cloudy installed but some hosts can be Cloudy only, no Kubernetes.
     cloudy_only:
       hosts:
@@ -12,7 +17,7 @@ all:
           ansible_host: 10.149.18.31
         cloudy-vm1:
           ansible_user: vagrant
-          ansible_host: 10.149.2.162
+          ansible_host: 10.149.244.6
         cloudy-vm2:
           ansible_user: vagrant
-          ansible_host: 10.149.142.1
+          ansible_host: 10.149.22.144
