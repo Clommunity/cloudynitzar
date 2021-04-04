@@ -1,2 +1,6 @@
 ---
 # vars file for vm-host
+# Which git repo should we retrieve the Vagrantfile from
+vagrantfile_repo: 
+# Which commit should we get the Vagrantfile from
+vagrantfile_commit: 

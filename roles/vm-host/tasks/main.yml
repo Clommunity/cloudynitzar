@@ -1,2 +1,15 @@
 ---
 # tasks file for vm-host
+- name: Check if the host is valid
+
+# Currently (04-APR-2021) we're unable to form a bridge with a wireless interface using netplan
+# Check if the primary interface is wireless and if so, die
+- name: Die if using wireless
+
+# Install vagrant and Virtualbox
+- name: Install packages
+
+# Modify interfaces/netplan
+- name: Modify network config
+
+# 

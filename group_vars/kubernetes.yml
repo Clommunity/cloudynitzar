@@ -1,3 +1,0 @@
----
-#Every node is a control node in an HA setup
-k3s_control_node: true
