@@ -1,4 +1,9 @@
 ---
+- name: Gather facts from the remote host
+  setup:
+    delegate_to: "{{ request_host }}"
+    delegate_facts: true
+
 - name: Run whoami without become.
   command: whoami
   changed_when: false

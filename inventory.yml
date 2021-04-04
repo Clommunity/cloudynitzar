@@ -1,13 +1,6 @@
 ---
 all:
   children:
-    certauthority:
-      hosts:
-        localhost:
-          ansible_connection: local
-    #Every host has cloudy installed but some hosts can be Cloudy only, no Kubernetes.
-    cloudy_only:
-      hosts:
     kubernetes:
       hosts:
         #Youll need to change these for your actual environment
