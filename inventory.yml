@@ -13,3 +13,6 @@ all:
         cloudy-vm2:
           ansible_user: vagrant
           ansible_host: 10.149.22.144
+        honeybee:
+          ansible_user: honeybee
+          ansible_host: 10.149.69.69

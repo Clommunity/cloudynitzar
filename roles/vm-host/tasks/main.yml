@@ -1,15 +1,38 @@
 ---
 # tasks file for vm-host
-- name: Check if the host is valid
+- name: Check if the host is a valid distribution
 
 # Currently (04-APR-2021) we're unable to form a bridge with a wireless interface using netplan
 # Check if the primary interface is wireless and if so, die
+# ansible_default_ipv4.type != "ether"
+# This isnt fullproof. Ive seen ansible report a wlan0 on a Rasp Pi as "ether"
 - name: Die if using wireless
 
-# Install vagrant and Virtualbox
-- name: Install packages
 
-# Modify interfaces/netplan
-- name: Modify network config
+- name: Install vagrant and Virtualbox
+  apt:
+    name: "{{ packages }}"
+    state: present
+    update_cache: yes
+    install_recommends: no
+  vars:
+    packages:
+    - vagrant
+    - virtualbox
 
-# 
+- name: Modify interfaces file on everything except Ubuntu 20.04 or greater
+
+- name: Apply new configuration on everything except Ubuntu 20.04 or greater
+
+# Applying the new config means we'll lose connection
+
+- name: Modify netplan file on Ubuntu 20.04 or greater
+
+- name: Apply netplan configurration on Ubuntu 20.04 or greater
+
+- name: Reset the connection to the device
+  meta: reset_connection
+
+- name: Wait for the network device to reload
+  wait_for_connection:
+    delay: {{ wait_for_connection_time }}

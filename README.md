@@ -36,6 +36,10 @@ The output of the whole Cloudynitzar process is logged to `/var/log/cloudy/cloud
 
 The included Vagrantfile can be used to quickly spin up a compatible VM. Requires vagrant and virtualbox to be installed. This is very useful for testing.
 
+Install the yaml edit module for ansible
+
+`ansible-galaxy install kwoodson.yedit`
+
 Install Ansible via pip/pip3 to ensure the latest version is installed.
 
 `pip install ansible`

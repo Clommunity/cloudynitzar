@@ -4,3 +4,6 @@
 vagrantfile_repo: 
 # Which commit should we get the Vagrantfile from
 vagrantfile_commit: 
+
+# How long to wait for connectivity to return when modifying a devices interfaces/netplan
+wait_for_connection_time: 10
