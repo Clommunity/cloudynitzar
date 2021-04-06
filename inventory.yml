@@ -7,12 +7,12 @@ all:
         raspberrypi:
           ansible_user: pi
           ansible_host: 10.149.18.31
-        cloudy-vm1:
-          ansible_user: vagrant
-          ansible_host: 10.149.244.6
-        cloudy-vm2:
-          ansible_user: vagrant
-          ansible_host: 10.149.22.144
+          k3s_control_node: true
+        desktop-ubuntu:
+          ansible_user: ansible
+          ansible_host: 10.149.201.242
+          k3s_control_node: true
         honeybee:
           ansible_user: honeybee
           ansible_host: 10.149.69.69
+          k3s_control_node: true

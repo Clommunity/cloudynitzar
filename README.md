@@ -34,6 +34,10 @@ The output of the whole Cloudynitzar process is logged to `/var/log/cloudy/cloud
 
 ## Ansible and Deployment
 
+On Raspberry Pis add the following to `/boot/cmdline.txt`
+
+`cgroup_memory=1 cgroup_enable=memory`
+
 The included Vagrantfile can be used to quickly spin up a compatible VM. Requires vagrant and virtualbox to be installed. This is very useful for testing.
 
 Install the yaml edit module for ansible
@@ -57,6 +61,10 @@ Check mode performs basic debug checks on each host.
 `ansible-playbook -i inventory.yml playbook.yml --check`
 
 Login once to each machine or add them to your ~/.ssh/known_hosts file. Ansible will throw an error when SSH asks you to verify a host.
+
+To reset k3s install:
+
+`ansible-playbook -i inventory.yml playbook.yml --become -e 'k3s_state=uninstalled'`
 
 ### Inventory
 
